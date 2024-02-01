@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
     $confirmPassword = $_POST["confirmPassword"];
+    $userRole = $_POST["userRole"];
 
     $servername = "localhost";
     $username_db = "root";
@@ -28,14 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>showAlert('Password and Confirm Password do not match. Please try again.');</script>";
     } else {
 
-
-        $insertQuery = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
-
-        if ($conn->query($insertQuery) === TRUE) {
+        $insertQuery = "INSERT INTO users (username,password,email,userrole) VALUES ('$username', '$password', '$email' ,'$userRole')";
+        if ($conn->query($insertQuery) === TRUE) 
+        {
             // Registration successful
             echo "<script>showAlert('Registration successful! You can now login with your credentials.');</script>";
             header("Location: login.php");
-        } else {
+            exit();
+        } else 
+        {
             // Display an error message (replace with actual error handling)
             echo "<script>showAlert('Error: " . $conn->error . "');</script>";
         }
@@ -69,6 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <label for="userRole">User Role:</label>
+            <select id="userRole" name="userRole" required>
+                <option value="venue_owner">Venue Owner</option>
+                <option value="customer">Customer</option>
+            </select>
 
             <button type="submit">Register</button>
         </form>

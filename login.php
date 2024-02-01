@@ -23,10 +23,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $name = $row['username'];
         $pass = $row['password'];
+        $email = $row['email'];
+        $userRole = $row['userrole'];
 
         if ($password == $pass) {
             $_SESSION['username'] = $name;
-            $_SESSION['email'] = $row['email'];
+            $_SESSION['email'] = $email
+            $_SESSION['userrole'] = $userRole;
 
             header("Location: index.php");
             exit();
