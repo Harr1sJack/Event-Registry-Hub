@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($password == $pass) {
             $_SESSION['username'] = $name;
-            $_SESSION['email'] = $email
+            $_SESSION['email'] = $email;
             $_SESSION['userrole'] = $userRole;
 
             header("Location: index.php");
@@ -67,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Login</button>
         </form>
         <p>Don't have an account? <a href="register.php">Register here</a>.</p>
+        <p>Don't want to sign in? <a href="index.php">Home page</a>.</p>
     </main>
 </body>
 </html>

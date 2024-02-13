@@ -10,7 +10,7 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #e6f7ff; /* Light blue background */
+        background-color: #e6f7ff;
     }
 
     header {
@@ -83,9 +83,19 @@
         <h1>Welcome to Event Registry Hub</h1>
         <div id="login-btn">
             <?php
-            // Simulated user login status and role (replace with actual login and role logic)
-            $loggedIn = true; // Change to false for simulation
-            $userRole = 'venue_owner'; // Change to 'customer' for simulation
+            session_start();
+            if(isset($_SESSION['username']))
+            {
+                $loggedIn = true;
+            }
+            else
+            {
+                $loggedIn = false;
+            }
+            if(isset($_SESSION['userrole']))
+            {
+                $userRole = $_SESSION['userrole'];
+            }
 
             if ($loggedIn) {
                 echo '<a href="logout.php">Logout</a>';
@@ -98,25 +108,40 @@
 
     <main>
         <?php
-        // Display content based on user role
-        if ($loggedIn) {
-            if ($userRole === 'venue_owner') {
-                // Venue owner view
-                echo '<h2>Create Venue</h2>';
-                echo '<p>Create your venue with details and description.</p>';
-                echo '<button>Create Venue</button>';
-            } else {
-                // Customer view
-                echo '<h2>Look for Venue</h2>';
-                echo '<p>Explore and book venues for your events.</p>';
-                echo '<button>Look for Venue</button>';
+            // Function to display the default view
+            function displayDefaultView() {
+                include 'defaultView.html';
+            }  
+
+            // Function to display the venue owner view
+            function displayVenueOwnerView() {
+                include 'venueOwnerView.html';
             }
-        } else {
-            // Default view for non-logged-in users
-            echo '<h2>Welcome to Event Registry Hub</h2>';
-            echo '<p>Login to access personalized features.</p>';
-        }
-        ?>
+
+            // Function to display the customer view
+            function displayCustomerView() {
+                include 'customerView.html';
+            }           
+
+            // Display content based on user role
+            if ($loggedIn) {
+                if (isset($userRole)) {
+                    if ($userRole === 'venue_owner') {
+                        displayVenueOwnerView();
+                } 
+                else 
+                {
+                displayCustomerView();
+                }
+            } 
+            else {
+                displayDefaultView();
+            }
+            } else {
+    displayDefaultView();
+}
+?>
+
     </main>
 
 </body>
