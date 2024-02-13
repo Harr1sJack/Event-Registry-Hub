@@ -20,24 +20,31 @@
         text-align: right;
     }
 
-    header a {
+    nav {
+        background-color: #007bff;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+    }
+
+    nav a {
         color: #fff;
         text-decoration: none;
-        padding: 5px 10px;
+        padding: 5px 20px;
         border: 1px solid #fff;
         border-radius: 4px;
     }
 
-    header a:hover {
+    nav a:hover {
         background-color: #fff;
         color: #333;
     }
 
     main {
-        max-width: 1200px; /* Increased width */
+        max-width: 1200px;
         margin: 20px auto;
         padding: 20px;
-        background-color: #ffffff; /* White background */
+        background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
@@ -53,7 +60,7 @@
     }
 
     table, th, td {
-        border: 2px solid #007bff; /* Border color - blue */
+        border: 2px solid #007bff;
     }
 
     th, td {
@@ -62,7 +69,7 @@
     }
 
     th {
-        background-color: #007bff; /* Header background color - blue */
+        background-color: #007bff;
         color: #fff;
     }
 
@@ -75,73 +82,54 @@
     a:hover {
         text-decoration: underline;
     }
-</style>
+    </style>
 </head>
 <body>
 
     <header>
         <h1>Welcome to Event Registry Hub</h1>
-        <div id="login-btn">
-            <?php
-            session_start();
-            if(isset($_SESSION['username']))
-            {
-                $loggedIn = true;
-            }
-            else
-            {
-                $loggedIn = false;
-            }
-            if(isset($_SESSION['userrole']))
-            {
-                $userRole = $_SESSION['userrole'];
-            }
-
-            if ($loggedIn) {
-                echo '<a href="logout.php">Logout</a>';
-            } else {
-                echo '<a href="login.php">Login</a>';
-            }
-            ?>
-        </div>
     </header>
+
+    <nav>
+        <?php
+        session_start();
+        if (isset($_SESSION['username'])) {
+            $loggedIn = true;
+        } else {
+            $loggedIn = false;
+        }
+        if (isset($_SESSION['userrole'])) {
+            $userRole = $_SESSION['userrole'];
+        }
+
+        if ($loggedIn) {
+            echo '<a href="logout.php">Logout</a>';
+            echo '<a href="profile.php">My Profile</a>';
+        } else {
+            echo '<a href="login.php">Login</a>';
+        }
+        ?>
+        <a href="search.php">Search</a>
+        <a href="help.php">Help & Support</a>
+        <a href="create.php">Create Venue</a>
+        <a href="explore.php">Explore</a>
+    </nav>
 
     <main>
         <?php
-            // Function to display the default view
-            function displayDefaultView() {
-                include 'defaultView.html';
-            }  
-
-            // Function to display the venue owner view
-            function displayVenueOwnerView() {
-                include 'venueOwnerView.html';
-            }
-
-            // Function to display the customer view
-            function displayCustomerView() {
-                include 'customerView.html';
-            }           
-
-            // Display content based on user role
-            if ($loggedIn) {
-                if (isset($userRole)) {
-                    if ($userRole === 'venue_owner') {
-                        displayVenueOwnerView();
-                } 
-                else 
-                {
-                displayCustomerView();
+        // Display content based on user role
+        if ($loggedIn) {
+            if (isset($userRole)) {
+                if ($userRole === 'venue_owner') {
+                    include 'venueOwnerView.html';
+                } else {
+                    include 'customerView.html';
                 }
-            } 
-            else {
-                displayDefaultView();
             }
-            } else {
-    displayDefaultView();
-}
-?>
-
+        } else {
+            include 'defaultView.html';
+        }
+        ?>
     </main>
 
 </body>
