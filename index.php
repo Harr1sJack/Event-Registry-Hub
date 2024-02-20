@@ -1,3 +1,8 @@
+<?php
+session_start();
+error_reporting(0);
+include('includes/dbconnection.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,36 +90,7 @@
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>Welcome to Event Registry Hub</h1>
-    </header>
-
-    <nav>
-        <?php
-        session_start();
-        if (isset($_SESSION['username'])) {
-            $loggedIn = true;
-        } else {
-            $loggedIn = false;
-        }
-        if (isset($_SESSION['userrole'])) {
-            $userRole = $_SESSION['userrole'];
-        }
-
-        if ($loggedIn) {
-            echo '<a href="logout.php">Logout</a>';
-            echo '<a href="profile.php">My Profile</a>';
-        } else {
-            echo '<a href="login.php">Login</a>';
-        }
-        ?>
-        <a href="search.php">Search</a>
-        <a href="help.php">Help & Support</a>
-        <a href="create.php">Create Venue</a>
-        <a href="explore.php">Explore</a>
-    </nav>
-
+    <?php include_once('includes/header.php');?>
     <main>
         <?php
         // Display content based on user role
