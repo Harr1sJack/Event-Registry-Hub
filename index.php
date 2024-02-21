@@ -18,33 +18,6 @@ include('includes/dbconnection.php');
         background-color: #e6f7ff;
     }
 
-    header {
-        background-color: #333;
-        color: #fff;
-        padding: 10px;
-        text-align: right;
-    }
-
-    nav {
-        background-color: #007bff;
-        display: flex;
-        justify-content: space-around;
-        padding: 10px;
-    }
-
-    nav a {
-        color: #fff;
-        text-decoration: none;
-        padding: 5px 20px;
-        border: 1px solid #fff;
-        border-radius: 4px;
-    }
-
-    nav a:hover {
-        background-color: #fff;
-        color: #333;
-    }
-
     main {
         max-width: 1200px;
         margin: 20px auto;

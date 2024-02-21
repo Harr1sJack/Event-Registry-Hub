@@ -1,27 +1,26 @@
 <?php
-// Include database connection or configuration file
-// require_once 'db_connection.php';
+include_once('includes/dbconnection.php');
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate and sanitize input data
     $venueName = htmlspecialchars($_POST['venue_name']);
+    $venueCapacity = intval($_POST['venue_capacity']); // Assuming venue_capacity is an integer
+    $venueLocation = htmlspecialchars($_POST['venue_location']);
+    $venuePrice = floatval($_POST['venue_price']); // Assuming venue_price is a decimal/float
     $venueDescription = htmlspecialchars($_POST['venue_description']);
-    // Add more fields as needed
 
-    // Perform database insert operation
-    // $sql = "INSERT INTO venues (name, description) VALUES ('$venueName', '$venueDescription')";
 
-    // Uncomment and modify the code above based on your database structure and connection
+    $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description) 
+                    VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription')";
 
-    // if ($conn->query($sql) === TRUE) {
-    //     echo "Venue created successfully!";
-    // } else {
-    //     echo "Error: " . $sql . "<br>" . $conn->error;
-    // }
+    if ($conn->query($insertQuery) === TRUE) {
+        echo "Venue created successfully!";
+    } else {
+        echo "Error: " . $insertQuery . "<br>" . $conn->error;
+    }
 
-    // Close the database connection if used
-    // $conn->close();
+    $conn->close();
 }
 ?>
 
