@@ -1,20 +1,10 @@
 <?php
 session_start();
 echo("<script src='index.js'></script>");
+include_once('includes/dbconnection.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
-
-    $servername = "localhost";
-    $username_db = "root";
-    $password_db = "";
-    $database = "eventregistryhub";
-
-    $conn = new mysqli($servername, $username_db, $password_db, $database);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
 
     $checkCredentialsQuery = "SELECT * FROM users WHERE username='$username'";
     $result = $conn->query($checkCredentialsQuery);
@@ -64,18 +54,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     header {
+        position: fixed;
+        top: 0;
+        width: 100%;
         background-color: #4285f4;
         color: #fff;
-        padding-right: 33.0em;
-        padding-left: 33.0em;
+        padding: 5px 0;
         text-align: center;
         font-size: 1.0em;
+        z-index: 1000; /* Ensure the header appears above other elements */
     }
 
     main {
+        position: fixed;
+        top: 70px;
         max-width: 400px;
-        margin:150px;
-        padding: 20px;
+        margin: 70px auto; /* Adjusted margin to accommodate fixed header */
+        padding: 30px;
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
@@ -90,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         margin-bottom: 8px;
     }
 
-    input {
+    input, select {
         margin-bottom: 16px;
         padding: 8px;
         border: 1px solid #ccc;

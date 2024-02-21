@@ -35,7 +35,7 @@
 </style>
 
 <header>
-        <h1>Welcome to Event Registry Hub</h1>
+        <h1>EVENT REGISTRY HUB</h1>
     </header>
 <nav>
     <?php
@@ -50,14 +50,14 @@
         }
 
         if ($loggedIn) {
-            echo '<a href="logout.php">Logout</a>';
-            echo '<a href="profile.php">My Profile</a>';
+            echo '<a href="logout.php">LOG OUT</a>';
+            echo '<a href="profile.php">MY PROFILE</a>';
         } else {
-            echo '<a href="login.php">Login</a>';
+            echo '<a href="login.php">LOGIN</a>';
         }
     ?>
-    <a href="search.php">Search</a>
-    <a href="help.php">Help & Support</a>
-    <a href="create.php">Create Venue</a>
-    <a href="explore.php">Explore</a>
+    <a href="create.php">CREATE VENUE</a>
+    <a href="search.php">SEARCH VENUE</a>
+    <a href="help.php">HELP & SUPPORT</a>
+    <a href="explore.php">MAIL US</a>
 </nav>
