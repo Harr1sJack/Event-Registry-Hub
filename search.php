@@ -61,7 +61,7 @@ if ($result->num_rows > 0) {
             background-color: #f2f2f2; /* Alternating row colors */
         }
 
-        .register-button {
+        .view-button {
             padding: 8px 12px;
             background-color: #4285f4;
             color: #fff;
@@ -72,7 +72,7 @@ if ($result->num_rows > 0) {
             transition: background-color 0.3s ease;
         }
 
-        .register-button:hover {
+        .view-button:hover {
             background-color: #3367d6;
         }
     </style>
@@ -93,7 +93,7 @@ if ($result->num_rows > 0) {
             echo '<td>' . $venue['venue_location'] . '</td>';
             echo '<td>' . $venue['venue_price'] . '</td>';
             echo '<td>' . $venue['venue_description'] . '</td>';
-            echo '<td><button class="register-button">Register</button></td>';
+            echo '<td><a href="venue.php"><button class="view-button">View</button></a></td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -101,13 +101,5 @@ if ($result->num_rows > 0) {
         echo '<p>No venues found.</p>';
     }
     ?>
-
-    <script>
-        function registerVenue(venueId) {
-            // Add your registration logic here
-            alert('Registering Venue with ID: ' + venueId);
-        }
-    </script>
-
 </body>
 </html>

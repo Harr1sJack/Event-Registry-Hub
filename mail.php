@@ -42,13 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #e6f7ff;
         }
 
-        header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-        }
-
         h1 {
             text-align: center;
             margin-top: 20px;
@@ -93,9 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <header>
-        <h1>Contact Us</h1>
-    </header>
+    <?php include_once('includes/header.php'); ?>
+    <h1>Contact Us</h1>
 
     <form method="post">
         <label for="name">Name:</label>
