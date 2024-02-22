@@ -3,34 +3,34 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa; /* Light background color */
+    background-color: #f8f9fa;
 }
 
 header {
-    background-color: #dc3545; /* Red header color */
+    background-color: lightsalmon;
     color: #fff;
     padding: 15px;
     text-align: center;
 }
 
 nav {
-    background-color: #007bff;
+    background-color: lightskyblue;
     display: flex;
     justify-content: center;
-    align-items: right; /* Align items vertically */
+    align-items: right; 
     padding: 10px;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
-    padding: 10px 20px; /* Increase padding for better touch experience */
+    padding: 10px 20px; 
     border-radius: 8px;
-    transition: background-color 0.3s, color 0.3s; /* Add smooth transition effect */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 nav a:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
     color: #fff;
 }
 
@@ -43,7 +43,7 @@ nav a:hover {
     <a href="index.php">HOME</a>
     <a href="create.php">CREATE VENUE</a>
     <a href="search.php">SEARCH VENUE</a>
-    <a href="explore.php">MAIL US</a>
+    <a href="mail.php">MAIL US</a>
     <?php
         session_start();
         if (isset($_SESSION['username'])) {

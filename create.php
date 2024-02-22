@@ -1,24 +1,28 @@
 <?php
 include_once('includes/dbconnection.php');
-
-// Check if the form is submitted
+echo("<script src='index.js'></script>");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate and sanitize input data
     $venueName = htmlspecialchars($_POST['venue_name']);
-    $venueCapacity = intval($_POST['venue_capacity']); // Assuming venue_capacity is an integer
+    $venueCapacity = intval($_POST['venue_capacity']); 
     $venueLocation = htmlspecialchars($_POST['venue_location']);
-    $venuePrice = floatval($_POST['venue_price']); // Assuming venue_price is a decimal/float
+    $venuePrice = floatval($_POST['venue_price']); 
     $venueDescription = htmlspecialchars($_POST['venue_description']);
 
 
     $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description) 
                     VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription')";
+    
+    $checkNameQuery = "SELECT * FROM venues WHERE venue_name='$venueName'";
 
-    if ($conn->query($insertQuery) === TRUE) {
-        echo "Venue created successfully!";
-    } else {
-        echo "Error: " . $insertQuery . "<br>" . $conn->error;
+    $result = $conn->query($checkNameQuery);
+
+    if ($result->num_rows > 0) {
+        echo "<script>showAlert('Venue name already exist. Please choose a different venue name.');</script>";
     }
+    else{
+        $conn->query($insertQuery);
+        echo "Venue created successfully!";
+    } 
 
     $conn->close();
 }
@@ -74,6 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     button {
+        position: relative;
+        left: 140;
+        
         padding: 12px;
         background-color: #007bff;
         color: #fff;
