@@ -34,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,66 +41,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Venue</title>
     <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #e6f7ff;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e6f7ff;
+        }
 
-    header {
-        background-color: #007bff;
-        color: #fff;
-        padding: 15px 0;
-        text-align: center;
-    }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+        }
 
-    h1 {
-        text-align: center;
-        margin-top: 20px;
-    }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-    form {
-        max-width: 400px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 8px;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
 
-    input, textarea {
-        width: 95%;
-        padding: 10px;
-        margin-bottom: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 16px;
-    }
+        input, textarea, select {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
 
-    button {
-        position: relative;
-        left: 140;
-        
-        padding: 12px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+        button {
+            position: relative;
+            left: 140;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-    button:hover {
-        background-color: #0056b3;
-    }
-</style>
-
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <?php include_once('includes/header.php');?>
@@ -115,7 +112,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="number" id="venue_capacity" name="venue_capacity" required>
 
         <label for="venue_location">Location:</label>
-        <input type="text" id="venue_location" name="venue_location" required>
+        <select id="venue_location" name="venue_location" required>
+            <option value="Nungambakkam">Nungambakkam</option>
+            <option value="Tambaram">Tambaram</option>
+            <option value="Guindy">Guindy</option>
+            <option value="Egmore">Egmore</option>
+            <option value="AnnaNagar">AnnaNagar</option>
+        </select>
 
         <label for="venue_price">Price:</label>
         <input type="number" id="venue_price" name="venue_price" required>
@@ -125,6 +128,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <button type="submit" name="submit">Create Venue</button>
     </form>
-
 </body>
 </html>

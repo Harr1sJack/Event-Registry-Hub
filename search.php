@@ -1,20 +1,37 @@
 <?php
 include_once('includes/dbconnection.php');
 
-// Fetch all venues from the database
-$query = "SELECT * FROM venues";
+$query = "SELECT DISTINCT venue_location FROM venues";
 $result = $conn->query($query);
 
-// Check for errors in the query execution
 if (!$result) {
     die("Query failed: " . $conn->error);
 }
 
-// Check if there are any venues
 if ($result->num_rows > 0) {
-    $venues = $result->fetch_all(MYSQLI_ASSOC);
+    $locations = $result->fetch_all(MYSQLI_ASSOC);
 } else {
-    $venues = []; // No venues found
+    $locations = [];
+}
+
+if (isset($_GET['location']) && !empty($_GET['location'])) {
+    $selectedLocation = $_GET['location'];
+    $filterQuery = "SELECT * FROM venues WHERE venue_location = '$selectedLocation'";
+} else {
+    $selectedLocation = ''; 
+    $filterQuery = "SELECT * FROM venues";
+}
+
+$filterResult = $conn->query($filterQuery);
+
+if (!$filterResult) {
+    die("Filter query failed: " . $conn->error);
+}
+
+if ($filterResult->num_rows > 0) {
+    $venues = $filterResult->fetch_all(MYSQLI_ASSOC);
+} else {
+    $venues = [];
 }
 ?>
 
@@ -25,7 +42,7 @@ if ($result->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Venues</title>
     <style>
-        body {
+body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -75,13 +92,30 @@ if ($result->num_rows > 0) {
         .view-button:hover {
             background-color: #3367d6;
         }
+        .filter-dropdown {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <?php
     include_once('includes/header.php');
-    
+
     echo("<h1>Search Venues</h1>");
+
+    // Display filter dropdown for locations
+    echo '<form method="get" class="filter-dropdown">';
+    echo '<label for="location">Filter by Location:</label>';
+    echo '<select id="location" name="location">';
+    echo '<option value="">All Locations</option>'; // Option to show all locations
+    foreach ($locations as $location) {
+        $selected = ($selectedLocation === $location['venue_location']) ? 'selected' : '';
+        echo '<option value="' . $location['venue_location'] . '" ' . $selected . '>' . $location['venue_location'] . '</option>';
+    }
+    echo '</select>';
+    echo '<button type="submit">Apply Filter</button>';
+    echo '</form>';
+
     // Display venues in a table
     if (!empty($venues)) {
         echo '<table>';
@@ -98,7 +132,7 @@ if ($result->num_rows > 0) {
         }
         echo '</table>';
     } else {
-        echo '<p>No venues found.</p>';
+        echo '<p>No venues found for the selected location.</p>';
     }
     ?>
 </body>
