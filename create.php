@@ -1,31 +1,38 @@
 <?php
+session_start();
 include_once('includes/dbconnection.php');
 echo("<script src='index.js'></script>");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $venueName = htmlspecialchars($_POST['venue_name']);
-    $venueCapacity = intval($_POST['venue_capacity']); 
-    $venueLocation = htmlspecialchars($_POST['venue_location']);
-    $venuePrice = floatval($_POST['venue_price']); 
-    $venueDescription = htmlspecialchars($_POST['venue_description']);
+    if (isset($_POST['submit']) && isset($_SESSION['username'])) {
+        $venueName = htmlspecialchars($_POST['venue_name']);
+        $venueCapacity = intval($_POST['venue_capacity']); 
+        $venueLocation = htmlspecialchars($_POST['venue_location']);
+        $venuePrice = floatval($_POST['venue_price']); 
+        $venueDescription = htmlspecialchars($_POST['venue_description']);
 
 
-    $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description) 
-                    VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription')";
+        $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description) 
+                        VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription')";
     
-    $checkNameQuery = "SELECT * FROM venues WHERE venue_name='$venueName'";
+        $checkNameQuery = "SELECT * FROM venues WHERE venue_name='$venueName'";
 
-    $result = $conn->query($checkNameQuery);
+        $result = $conn->query($checkNameQuery);
 
-    if ($result->num_rows > 0) {
+        if ($result->num_rows > 0) {
         echo "<script>showAlert('Venue name already exist. Please choose a different venue name.');</script>";
     }
     else{
         $conn->query($insertQuery);
         echo "Venue created successfully!";
     } 
-
-    $conn->close();
+        $conn->close();
+    }
+    else
+    {
+        echo "<script>showAlert('Please Login before creating a venue!');</script>";
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="venue_description">Description:</label>
         <textarea id="venue_description" name="venue_description" required></textarea>
 
-        <button type="submit">Create Venue</button>
+        <button type="submit" name="submit">Create Venue</button>
     </form>
 
 </body>

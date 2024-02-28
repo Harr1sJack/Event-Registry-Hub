@@ -45,7 +45,11 @@ nav a:hover {
     <a href="search.php">SEARCH VENUE</a>
     <a href="mail.php">MAIL US</a>
     <?php
-        session_start();
+        if(session_status() == PHP_SESSION_NONE)
+        {
+            session_start();
+        }
+
         if (isset($_SESSION['username'])) {
             $loggedIn = true;
         } else {
