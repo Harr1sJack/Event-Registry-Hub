@@ -24,9 +24,9 @@ nav {
 nav a {
     color: #fff;
     text-decoration: none;
-    padding: 10px 20px; 
+    padding: 10px 30px; 
     border-radius: 8px;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.90s, color 0.90s;
 }
 
 nav a:hover {
