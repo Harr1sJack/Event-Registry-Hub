@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $venuePrice = floatval($_POST['venue_price']); 
         $venueDescription = htmlspecialchars($_POST['venue_description']);
 
-
         $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description) 
                         VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription')";
     

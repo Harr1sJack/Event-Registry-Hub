@@ -14,13 +14,34 @@ if ($result->num_rows > 0) {
     $locations = [];
 }
 
+// Handle the location filter
 if (isset($_GET['location']) && !empty($_GET['location'])) {
     $selectedLocation = $_GET['location'];
-    $filterQuery = "SELECT * FROM venues WHERE venue_location = '$selectedLocation'";
+    $locationFilter = " AND venue_location = '$selectedLocation'";
 } else {
     $selectedLocation = ''; 
-    $filterQuery = "SELECT * FROM venues";
+    $locationFilter = '';
 }
+
+// Handle the price filter
+if (isset($_GET['price']) && is_numeric($_GET['price'])) {
+    $selectedPrice = floatval($_GET['price']);
+    $priceFilter = " AND venue_price <= $selectedPrice";
+} else {
+    $selectedPrice = ''; 
+    $priceFilter = '';
+}
+
+// Handle the capacity filter
+if (isset($_GET['capacity']) && is_numeric($_GET['capacity'])) {
+    $selectedCapacity = intval($_GET['capacity']);
+    $capacityFilter = " AND venue_capacity >= $selectedCapacity";
+} else {
+    $selectedCapacity = ''; 
+    $capacityFilter = '';
+}
+
+$filterQuery = "SELECT * FROM venues WHERE 1 $locationFilter $priceFilter $capacityFilter";
 
 $filterResult = $conn->query($filterQuery);
 
@@ -42,7 +63,7 @@ if ($filterResult->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Venues</title>
     <style>
-body {
+        body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -92,8 +113,38 @@ body {
         .view-button:hover {
             background-color: #3367d6;
         }
+
         .filter-dropdown {
+            display: flex;
+            align-items: center;
             margin-bottom: 20px;
+        }
+
+        .filter-dropdown label {
+            margin-right: 10px;
+        }
+
+        .filter-dropdown select,
+        .filter-dropdown input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-dropdown button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-dropdown button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -113,6 +164,15 @@ body {
         echo '<option value="' . $location['venue_location'] . '" ' . $selected . '>' . $location['venue_location'] . '</option>';
     }
     echo '</select>';
+
+    // Display filter input for price
+    echo '<label for="price">Filter by Price (max):</label>';
+    echo '<input type="number" id="price" name="price" value="' . $selectedPrice . '" placeholder="Enter max price">';
+
+    // Display filter input for capacity
+    echo '<label for="capacity">Filter by Capacity (min):</label>';
+    echo '<input type="number" id="capacity" name="capacity" value="' . $selectedCapacity . '" placeholder="Enter min capacity">';
+
     echo '<button type="submit">Apply Filter</button>';
     echo '</form>';
 
@@ -132,7 +192,7 @@ body {
         }
         echo '</table>';
     } else {
-        echo '<p>No venues found for the selected location.</p>';
+        echo '<p>No venues found for the selected filters.</p>';
     }
     ?>
 </body>
