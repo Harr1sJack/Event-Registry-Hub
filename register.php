@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>showAlert('Password and Confirm Password do not match. Please try again.');</script>";
     } else {
 
-        $insertQuery = "INSERT INTO users (username,password,email,userrole) VALUES ('$username', '$password', '$email' ,'$userRole')";
+        $insertQuery = "INSERT INTO users (username,password,email) VALUES ('$username', '$password', '$email')";
         if ($conn->query($insertQuery) === TRUE) 
         {
             // Registration successful

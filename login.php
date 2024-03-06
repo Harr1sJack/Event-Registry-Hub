@@ -11,12 +11,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
+        $user_id = $row['user_id'];
         $name = $row['username'];
         $pass = $row['password'];
         $email = $row['email'];
         $userRole = $row['userrole'];
 
         if ($password == $pass) {
+            $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['userrole'] = $userRole;

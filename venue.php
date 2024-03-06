@@ -1,21 +1,66 @@
 <?php
 include_once('includes/dbconnection.php');
 
-$venueName = isset($_GET['name']) ? urldecode($_GET['name']) : '';
+// Assuming you have a venue ID passed through the URL
+if (isset($_GET['venue_id'])) {
+    $venueId = $_GET['venue_id'];
 
-$query = "SELECT * FROM venues WHERE venue_name = '$venueName'";
-$result = $conn->query($query);
+    // Fetch venue details based on the ID
+    $query = "SELECT * FROM venues WHERE venue_id = $venueId";
+    $result = $conn->query($query);
 
-if (!$result) {
-    die("Query failed: " . $conn->error);
-}
+    if (!$result) {
+        die("Query failed: " . $conn->error);
+    }
 
-if ($result->num_rows > 0) {
-    $venue = $result->fetch_assoc();
+    // Check if the venue exists
+    if ($result->num_rows > 0) {
+        $venueDetails = $result->fetch_assoc();
+    } else {
+        // Redirect to the search page or display an error message
+        header("Location: search.php");
+        exit();
+    }
 } else {
+    // Redirect to the search page if no venue ID is provided
     header("Location: search.php");
     exit();
 }
+
+session_start();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Assuming you have user information available in the session
+    // Modify this based on your actual user authentication implementation
+    $userId = $_SESSION['user_id']; // Replace with the actual session variable for user ID
+
+    $venueId = $_POST["venue_id"];
+    $registrationDate = $_POST["registration_date"];
+
+    // Check if the selected date is available for the venue
+    $availabilityQuery = "SELECT * FROM venue_registrations WHERE venue_id = $venueId AND registration_date = '$registrationDate'";
+    $availabilityResult = $conn->query($availabilityQuery);
+
+    if (!$availabilityResult) {
+        die("Availability check failed: " . $conn->error);
+    }
+
+    if ($availabilityResult->num_rows > 0) {
+        // Date is already booked, handle accordingly (e.g., show an error message)
+        echo "Selected date is not available. Please choose another date.";
+    } else {
+        // Date is available, proceed with registration
+        $insertQuery = "INSERT INTO venue_registrations (user_id, venue_id, registration_date) VALUES ($userId, $venueId, '$registrationDate')";
+        
+        if ($conn->query($insertQuery) === TRUE) {
+            // Registration successful
+            echo "Registration successful!"; // You can redirect or display a success message here
+        } else {
+            // Display an error message (replace with actual error handling)
+            echo "Error: " . $conn->error;
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -32,47 +77,93 @@ if ($result->num_rows > 0) {
             background-color: #e6f7ff;
         }
 
+        header {
+            background-color: #4285f4;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
         h1 {
             text-align: center;
             margin-top: 20px;
         }
 
-        table {
-            width: 60%;
+        .venue-details {
+            max-width: 600px;
             margin: 20px auto;
+            padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
 
-        th, td {
+        .venue-details p {
+            margin-bottom: 10px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
             padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #007bff;
+            background-color: #4285f4;
             color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2; /* Alternating row colors */
+        button:hover {
+            background-color: #3367d6;
         }
     </style>
 </head>
 <body>
     <?php
     include_once('includes/header.php');
-    
-    echo '<h1>Venue Details</h1>';
-    echo '<table>';
-    foreach ($venue as $key => $value) {
-        echo '<tr>';
-        echo '<th>' . $key . '</th>';
-        echo '<td>' . $value . '</td>';
-        echo '</tr>';
+
+    echo "<h1>Venue Details</h1>";
+
+    // Display venue details
+    if (!empty($venueDetails)) {
+        echo '<form method="post">';
+        echo '<label for="venue_name"><strong>Venue Name:</strong> ' . $venueDetails['venue_name'] . '</label>';
+        echo '<label for="venue_capacity"><strong>Venue Capacity:</strong> ' . $venueDetails['venue_capacity'] . '</label>';
+        echo '<label for="venue_location"><strong>Venue Location:</strong> ' . $venueDetails['venue_location'] . '</label>';
+        echo '<label for="venue_price"><strong>Venue Price:</strong> ' . $venueDetails['venue_price'] . '</label>';
+        echo '<label for="venue_description"><strong>Venue Description:</strong> ' . $venueDetails['venue_description'] . '</label>';
+
+        echo '<input type="hidden" name="venue_id" value="' . $venueDetails['venue_id'] . '">';
+        echo '<label for="registration_date"><strong>Select Registration Date:</strong></label>';
+        echo '<input type="date" id="registration_date" name="registration_date" required>';
+        echo '<button type="submit">Register for Event</button>';
+        echo '</form>';
+    } else {
+        echo '<p>Venue details not found.</p>';
     }
-    echo '</table>';
     ?>
 </body>
 </html>

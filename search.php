@@ -187,7 +187,7 @@ if ($filterResult->num_rows > 0) {
             echo '<td>' . $venue['venue_location'] . '</td>';
             echo '<td>' . $venue['venue_price'] . '</td>';
             echo '<td>' . $venue['venue_description'] . '</td>';
-            echo '<td><a href="venue.php"><button class="view-button">View</button></a></td>';
+            echo '<td><a href="venue.php?venue_id=' . $venue['venue_id'] . '"><button class="view-button">View</button></a></td>';
             echo '</tr>';
         }
         echo '</table>';
