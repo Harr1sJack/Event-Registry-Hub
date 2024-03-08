@@ -1,6 +1,6 @@
 <?php
 include_once('includes/dbconnection.php');
-
+echo("<script src='index.js'></script>");
 // Assuming you have a venue ID passed through the URL
 if (isset($_GET['venue_id'])) {
     $venueId = $_GET['venue_id'];
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($availabilityResult->num_rows > 0) {
         // Date is already booked, handle accordingly (e.g., show an error message)
-        echo "Selected date is not available. Please choose another date.";
+        echo "<script>showAlert('Selected date is not available. Please choose another date.')</script>";
     } else {
         // Date is available, proceed with registration
         $insertQuery = "INSERT INTO venue_registrations (user_id, venue_id, registration_date) VALUES ($userId, $venueId, '$registrationDate')";
