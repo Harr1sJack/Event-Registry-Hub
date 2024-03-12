@@ -153,12 +153,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" id="confirmPassword" name="confirmPassword" required>
 
-            <label for="userRole">User Role:</label>
-            <select id="userRole" name="userRole" required>
-                <option value="venue_owner">Venue Owner</option>
-                <option value="customer">Customer</option>
-            </select>
-
             <button type="submit">Register</button>
         </form>
         <p>Already have an account? <a href="login.php">Login here</a>.</p>

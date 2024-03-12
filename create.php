@@ -9,9 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $venueLocation = htmlspecialchars($_POST['venue_location']);
         $venuePrice = floatval($_POST['venue_price']); 
         $venueDescription = htmlspecialchars($_POST['venue_description']);
-
-        $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description) 
-                        VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription')";
+        $user_id = $_SESSION['user_id'];
+        $insertQuery = "INSERT INTO venues (venue_name, venue_capacity, venue_location, venue_price, venue_description,user_id) 
+                        VALUES ('$venueName', $venueCapacity, '$venueLocation', $venuePrice, '$venueDescription',$user_id)";
     
         $checkNameQuery = "SELECT * FROM venues WHERE venue_name='$venueName'";
 

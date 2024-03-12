@@ -1,6 +1,7 @@
 <?php
 include_once('includes/dbconnection.php');
 echo("<script src='index.js'></script>");
+
 // Assuming you have a venue ID passed through the URL
 if (isset($_GET['venue_id'])) {
     $venueId = $_GET['venue_id'];
@@ -36,32 +37,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $venueId = $_POST["venue_id"];
     $registrationDate = $_POST["registration_date"];
 
-    // Check if the selected date is available for the venue
-    $availabilityQuery = "SELECT * FROM venue_registrations WHERE venue_id = $venueId AND registration_date = '$registrationDate'";
-    $availabilityResult = $conn->query($availabilityQuery);
-
-    if (!$availabilityResult) {
-        die("Availability check failed: " . $conn->error);
-    }
-
-    if ($availabilityResult->num_rows > 0) {
-        // Date is already booked, handle accordingly (e.g., show an error message)
-        echo "<script>showAlert('Selected date is not available. Please choose another date.')</script>";
+    // Check if the selected date is in the past
+    $today = date("Y-m-d");
+    if ($registrationDate <= $today) {
+        echo "<script>showAlert('Selected date cannot be in the past. Please choose another date.')</script>";
     } else {
-        // Date is available, proceed with registration
-        $insertQuery = "INSERT INTO venue_registrations (user_id, venue_id, registration_date) VALUES ($userId, $venueId, '$registrationDate')";
-        
-        if ($conn->query($insertQuery) === TRUE) {
-            // Registration successful
-            echo "Registration successful!"; // You can redirect or display a success message here
+        // Check if the selected date is available for the venue
+        $availabilityQuery = "SELECT * FROM venue_registrations WHERE venue_id = $venueId AND registration_date = '$registrationDate'";
+        $availabilityResult = $conn->query($availabilityQuery);
+
+        if (!$availabilityResult) {
+            die("Availability check failed: " . $conn->error);
+        }
+
+        if ($availabilityResult->num_rows > 0) {
+            // Date is already booked, handle accordingly (e.g., show an error message)
+            echo "<script>showAlert('Selected date is not available. Please choose another date.')</script>";
         } else {
-            // Display an error message (replace with actual error handling)
-            echo "Error: " . $conn->error;
+            // Date is available, proceed with registration
+            $insertQuery = "INSERT INTO venue_registrations (user_id, venue_id, registration_date) VALUES ($userId, $venueId, '$registrationDate')";
+            
+            if ($conn->query($insertQuery) === TRUE) {
+                // Registration successful
+                echo "<script>showAlert('Registration successful!')</script>"; // You can redirect or display a success message here
+            } else {
+                // Display an error message (replace with actual error handling)
+                echo "<script>showAlert('Error: " . $conn->error . "')</script>";
+            }
         }
     }
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

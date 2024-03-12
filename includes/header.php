@@ -7,18 +7,31 @@ body {
 }
 
 header {
-    background-color: lightsalmon;
+    background: linear-gradient(45deg, lightsalmon, lightskyblue, #0056b3);
     color: #fff;
     padding: 15px;
     text-align: center;
+    background-size: 200% 200%;
+    animation: gradientAnimation 5s infinite linear;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
 }
 
 nav {
-    background-color: lightskyblue;
+    background: linear-gradient(45deg, lightsalmon, lightskyblue, #0056b3);
     display: flex;
     justify-content: center;
     align-items: right; 
     padding: 10px;
+    background-size: 200% 200%;
+    animation: gradientAnimation 5s infinite linear;
 }
 
 nav a {
@@ -33,8 +46,8 @@ nav a:hover {
     background-color: #0056b3;
     color: #fff;
 }
-
 </style>
+
 
 <header>
         <h1>EVENT REGISTRY HUB</h1>
