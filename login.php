@@ -67,8 +67,8 @@ function sendWelcomeEmail($username, $userEmail) {
         $mail->Port       = 587;
 
         // Recipients
-        $mail->setFrom('jack4504harris@gmail.com', 'Jack'); // Replace with your name and email
-        $mail->addAddress($userEmail, $username);
+        $mail->setFrom('jack4504harris@gmail.com', 'Jack');
+        $mail->addAddress($userEmail);
 
         // Content
         $mail->isHTML(true);
