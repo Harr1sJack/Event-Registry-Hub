@@ -2,6 +2,17 @@
 session_start();
 echo("<script src='index.js'></script>");
 include_once('includes/dbconnection.php');
+
+// Include PHPMailer classes
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load PHPMailer autoloader
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
@@ -18,11 +29,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $userRole = $row['userrole'];
 
         if ($password == $pass) {
+            // Set session variables
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['userrole'] = $userRole;
 
+            // Send welcome email
+            sendWelcomeEmail($name, $email);
+
+            // Redirect to index.php after successful login
             header("Location: index.php");
             exit();
         } else {
@@ -33,6 +49,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
+}
+
+// Function to send a welcome email
+function sendWelcomeEmail($username, $userEmail) {
+    // Create a new PHPMailer instance
+    $mail = new PHPMailer(true);
+
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'jack4504harris@gmail.com'; // Replace with your email
+        $mail->Password   = 'naiezdblinnzpeec '; // Replace with your email password
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        // Recipients
+        $mail->setFrom('jack4504harris@gmail.com', 'Jack'); // Replace with your name and email
+        $mail->addAddress($userEmail, $username);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Welcome to Event Registry Hub';
+        $mail->Body    = 'Dear ' . $username . ',<br>Welcome to Event Registry Hub!';
+
+        // Send email
+        $mail->send();
+        echo "Message has been sent successfully!";
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
 }
 ?>
 
@@ -122,8 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     a:hover {
         text-decoration: underline;
     }
-</style>
-
+    </style>
 </head>
 <body>
     <header>

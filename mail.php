@@ -1,16 +1,26 @@
 <?php
 echo("<script src='index.js'></script>");
+
+// Include PHPMailer classes
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load PHPMailer autoloader
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $to = 'harris4504jack@gmail.com'; // 
-    $subject = 'Contact Form Submission';
 
-
-    $name = htmlspecialchars($_POST['name']);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $message = htmlspecialchars($_POST['message']);
+    $name = $_POST['name'];
+    $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+    $message = $_POST['message'];
+    $to = $email;
+    $subject = 'Contact Us';
 
     if (empty($name) || empty($email) || empty($message)) {
-        echo "<script>showAlert(All fields are required)</script>";
+        echo "<script>showAlert('All fields are required')</script>";
         exit();
     }
 
@@ -20,10 +30,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $headers = "From: $email";
 
-    if (mail($to, $subject, $messageBody, $headers)) {
-        echo "<script>showAlert(Your message has been sent successfully!)</script>";
+    if (SendMail($to, $subject, $messageBody, $headers)) {
+        echo "<script>showAlert('Your message has been sent successfully!')</script>";
     } else {
-        echo "<script>showAlert(Failed to send the message. Please try again later.)</script>";
+        echo "<script>showAlert('Failed to send the message. Please try again later.')</script>";
+    }
+}
+
+function SendMail($to, $subject, $messageBody, $headers)
+{
+    $mail = new PHPMailer(true);
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'jack4504harris@gmail.com'; // Replace with your email
+        $mail->Password   = 'naiezdblinnzpeec '; // Replace with your email password
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        // Recipients
+        $mail->setFrom('jack4504harris@gmail.com', 'Jack'); // Replace with your name and email
+        $mail->addAddress($to);
+
+        // Content
+        $mail->isHTML(false); // Set to false for plain text email
+        $mail->Subject = $subject;
+        $mail->Body    = $messageBody;
+
+        // Send email
+        return $mail->send();
+    } catch (Exception $e) {
+        return false;
     }
 }
 ?>
