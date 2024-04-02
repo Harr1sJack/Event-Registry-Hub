@@ -38,8 +38,6 @@ if (!$registeredVenuesResult) {
 
 $registeredVenues = ($registeredVenuesResult->num_rows > 0) ? $registeredVenuesResult->fetch_all(MYSQLI_ASSOC) : [];
 
-// Include header
-include_once('includes/header.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,6 +60,27 @@ include_once('includes/header.php');
 
         h2 {
             margin-top: 30px;
+        }
+
+        .user-details {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .user-details p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        .user-details hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ccc;
         }
 
         .venue-details {
@@ -107,10 +126,51 @@ include_once('includes/header.php');
     </style>
 </head>
 <body>
-    <h1>User Profile</h1>
+    <?php
+    include_once('includes/header.php');
+
+    // Include database connection
+    include_once('includes/dbconnection.php');
+
+    // Check if the user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+
+    // Get user ID from the session
+    $userId = $_SESSION['user_id'];
+
+    // Fetch user details
+    $userQuery = "SELECT * FROM users WHERE user_id = $userId";
+    $userResult = $conn->query($userQuery);
+
+    if (!$userResult) {
+        die("Query failed: " . $conn->error);
+    }
+
+    // Get user details
+    $userDetails = $userResult->fetch_assoc();
+    ?>
+    <div class="user-details">
+        <h1>User Profile</h1>
+        <hr>
+        <p><strong>Name:</strong> <?php echo $userDetails['username']; ?></p>
+        <p><strong>Email:</strong> <?php echo $userDetails['email']; ?></p>
+    </div>
 
     <h2>Created Venues:</h2>
     <?php
+    // Fetch past created venues
+    $createdVenuesQuery = "SELECT * FROM venues WHERE user_id = $userId";
+    $createdVenuesResult = $conn->query($createdVenuesQuery);
+
+    if (!$createdVenuesResult) {
+        die("Query failed: " . $conn->error);
+    }
+
+    $createdVenues = ($createdVenuesResult->num_rows > 0) ? $createdVenuesResult->fetch_all(MYSQLI_ASSOC) : [];
+
     if (!empty($createdVenues)) {
         foreach ($createdVenues as $venue) {
             // Fetch the corresponding venue details from the "venues" table
@@ -139,6 +199,21 @@ include_once('includes/header.php');
 
     <h2>Registered Venues:</h2>
     <?php
+    // Fetch registered venues with user information
+    $registeredVenuesQuery = "SELECT v.*, vr.registration_date, u.username
+                            FROM venues v
+                            JOIN venue_registrations vr ON v.venue_id = vr.venue_id
+                            JOIN users u ON vr.user_id = u.user_id
+                            WHERE vr.user_id = $userId";
+
+    $registeredVenuesResult = $conn->query($registeredVenuesQuery);
+
+    if (!$registeredVenuesResult) {
+        die("Query failed: " . $conn->error);
+    }
+
+    $registeredVenues = ($registeredVenuesResult->num_rows > 0) ? $registeredVenuesResult->fetch_all(MYSQLI_ASSOC) : [];
+
     if (!empty($registeredVenues)) {
         foreach ($registeredVenues as $venue) {
             echo '<div class="registered-venues">';
