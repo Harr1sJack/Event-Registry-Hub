@@ -41,14 +41,70 @@ $registeredVenues = ($registeredVenuesResult->num_rows > 0) ? $registeredVenuesR
 // Include header
 include_once('includes/header.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <!-- Add your styles here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        .venue-details {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .venue-details p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        .venue-details hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+
+        .registered-venues {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .registered-venues p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        .registered-venues hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
     <h1>User Profile</h1>
@@ -59,19 +115,22 @@ include_once('includes/header.php');
         foreach ($createdVenues as $venue) {
             // Fetch the corresponding venue details from the "venues" table
             $venueId = $venue['venue_id'];
-            //$venueDetailsQuery = "SELECT * FROM venues WHERE venue_id = $venueId";
-            //$venueDetailsResult = $conn->query($venueDetailsQuery);
+            $venueDetailsQuery = "SELECT * FROM venues WHERE venue_id = $venueId";
+            $venueDetailsResult = $conn->query($venueDetailsQuery);
 
-            //if (!$venueDetailsResult) {
-            //    die("Query failed: " . $conn->error);
-            //}
+            if (!$venueDetailsResult) {
+                die("Query failed: " . $conn->error);
+            }
 
-            //$venueDetails = ($venueDetailsResult->num_rows > 0) ? $venueDetailsResult->fetch_assoc() : [];
+            $venueDetails = ($venueDetailsResult->num_rows > 0) ? $venueDetailsResult->fetch_assoc() : [];
 
+            echo '<div class="venue-details">';
             echo '<p>Venue Name: ' . $venue['venue_name'] . '</p>';
             echo '<p>Venue Capacity: ' . $venue['venue_capacity'] . '</p>';
-            // Add more details as needed
-            echo '<hr>';
+            echo '<p>Venue Location: ' . $venueDetails['venue_location'] . '</p>';
+            echo '<p>Venue Price: ' . $venueDetails['venue_price'] . '</p>';
+            echo '<p>Venue Description: ' . $venueDetails['venue_description'] . '</p>';
+            echo '</div>';
         }
     } else {
         echo '<p>No venues created.</p>';
@@ -82,12 +141,12 @@ include_once('includes/header.php');
     <?php
     if (!empty($registeredVenues)) {
         foreach ($registeredVenues as $venue) {
+            echo '<div class="registered-venues">';
             echo '<p>Venue Name: ' . $venue['venue_name'] . '</p>';
             echo '<p>Venue Capacity: ' . $venue['venue_capacity'] . '</p>';
             echo '<p>Registration Date: ' . $venue['registration_date'] . '</p>';
             echo '<p>Booked by: ' . $venue['username'] . '</p>';
-            // Add more details as needed
-            echo '<hr>';
+            echo '</div>';
         }
     } else {
         echo '<p>No venues registered.</p>';
@@ -95,3 +154,4 @@ include_once('includes/header.php');
     ?>
 </body>
 </html>
+

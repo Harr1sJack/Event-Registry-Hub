@@ -122,9 +122,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         label {
             display: block;
             margin-bottom: 8px;
+            font-weight: bold;
         }
 
-        input {
+        input[type="date"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 16px;
@@ -156,16 +157,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Display venue details
     if (!empty($venueDetails)) {
-        echo '<form method="post">';
-        echo '<label for="venue_name"><strong>Venue Name:</strong> ' . $venueDetails['venue_name'] . '</label>';
-        echo '<label for="venue_capacity"><strong>Venue Capacity:</strong> ' . $venueDetails['venue_capacity'] . '</label>';
-        echo '<label for="venue_location"><strong>Venue Location:</strong> ' . $venueDetails['venue_location'] . '</label>';
-        echo '<label for="venue_price"><strong>Venue Price:</strong> ' . $venueDetails['venue_price'] . '</label>';
-        echo '<label for="venue_description"><strong>Venue Description:</strong> ' . $venueDetails['venue_description'] . '</label>';
+        echo '<div class="venue-details">';
+        echo '<p><strong>Venue Name:</strong> ' . $venueDetails['venue_name'] . '</p>';
+        echo '<p><strong>Venue Capacity:</strong> ' . $venueDetails['venue_capacity'] . '</p>';
+        echo '<p><strong>Venue Location:</strong> ' . $venueDetails['venue_location'] . '</p>';
+        echo '<p><strong>Venue Price:</strong> ' . $venueDetails['venue_price'] . '</p>';
+        echo '<p><strong>Venue Description:</strong> ' . $venueDetails['venue_description'] . '</p>';
+        echo '</div>';
 
-        echo '<input type="hidden" name="venue_id" value="' . $venueDetails['venue_id'] . '">';
-        echo '<label for="registration_date"><strong>Select Registration Date:</strong></label>';
+        echo '<form method="post">';
+        echo '<label for="registration_date">Select Registration Date:</label>';
         echo '<input type="date" id="registration_date" name="registration_date" required>';
+        echo '<input type="hidden" name="venue_id" value="' . $venueDetails['venue_id'] . '">';
         echo '<button type="submit">Register for Event</button>';
         echo '</form>';
     } else {
@@ -174,3 +177,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
 </body>
 </html>
+
